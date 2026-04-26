@@ -1342,16 +1342,23 @@
     id="keza-frame"
     src="https://hotel-eza-chat.netlify.app"
     allowtransparency="true"
+    allow="clipboard-write"
     scrolling="no"
-    style="position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;">
+    style="position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;overflow:hidden;-webkit-transform:translateZ(0);transform:translateZ(0);">
   </iframe>
   <script>
   window.addEventListener('message', function(e) {
     var f = document.getElementById('keza-frame');
     if (!f || !e.data || !e.data.type) return;
-    var base = 'position:fixed;border:none;z-index:9999;background:transparent;';
-    if (e.data.type === 'keza-open')
-      f.style.cssText = base + 'bottom:0;right:0;width:400px;height:700px;';
+    var isMobile = window.innerWidth < 768;
+    var base = 'position:fixed;border:none;z-index:9999;background:transparent;overflow:hidden;-webkit-transform:translateZ(0);transform:translateZ(0);';
+    if (e.data.type === 'keza-open') {
+      if (isMobile) {
+        f.style.cssText = base + 'top:0;left:0;width:100%;height:100%;';
+      } else {
+        f.style.cssText = base + 'bottom:0;right:0;width:400px;height:700px;';
+      }
+    }
     if (e.data.type === 'keza-open-mobile')
       f.style.cssText = base + 'top:0;left:0;width:100%;height:100%;';
     if (e.data.type === 'keza-close')
