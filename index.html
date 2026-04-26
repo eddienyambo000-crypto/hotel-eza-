@@ -838,11 +838,33 @@
     footer p { font-size: 0.78rem; color: rgba(255,255,255,0.2); }
 
     /* ─── SCROLL REVEAL ─── */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.2,0.64,1); }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+    .reveal-delay-3 { transition-delay: 0.36s; }
+
+    /* Slide from left */
+    .reveal-left { opacity: 0; transform: translateX(-48px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    /* Slide from right */
+    .reveal-right { opacity: 0; transform: translateX(48px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* Scale up */
+    .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* Gold line grow */
+    .gold-line { width: 0; height: 1px; background: var(--gold); transition: width 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s; }
+    .gold-line.visible { width: 56px; }
+
+    /* Stat counter */
+    .stat-num { transition: color 0.4s ease; }
+
+    /* Smooth parallax */
+    .parallax-img { will-change: transform; }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 1024px) {
@@ -970,11 +992,11 @@
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item reveal">
-          <div class="stat-num">50+</div>
+          <div class="stat-num" data-count="50" data-suffix="+">50+</div>
           <div class="stat-label">Rooms Available</div>
         </div>
         <div class="stat-item reveal reveal-delay-1">
-          <div class="stat-num">4.9★</div>
+          <div class="stat-num" data-count="4.9" data-suffix="★">4.9★</div>
           <div class="stat-label">Guest Rating</div>
         </div>
         <div class="stat-item reveal reveal-delay-2">
@@ -982,7 +1004,7 @@
           <div class="stat-label">Front Desk Service</div>
         </div>
         <div class="stat-item reveal reveal-delay-3">
-          <div class="stat-num">100%</div>
+          <div class="stat-num" data-count="100" data-suffix="%">100%</div>
           <div class="stat-label">Satisfaction Rate</div>
         </div>
       </div>
@@ -993,19 +1015,19 @@
   <section id="about" class="about-section">
     <div class="container">
       <div class="about-grid">
-        <div class="about-img-wrap reveal">
+        <div class="about-img-wrap reveal-left">
           <div class="about-img-main">
-            <img src="images/room-2.jpg" alt="Hotel Eza Interior">
+            <img src="images/room-2.jpg" alt="Hotel Eza Interior" class="parallax-img">
           </div>
-          <div class="about-badge">
+          <div class="about-badge reveal-scale reveal-delay-2">
             <div class="about-badge-num">5★</div>
             <div class="about-badge-text">Guest Experience</div>
           </div>
         </div>
-        <div class="about-text reveal reveal-delay-1">
+        <div class="about-text reveal-right reveal-delay-1">
           <div class="label">About Hotel Eza</div>
           <h2>A better way<br>to <em>stay in Kigali</em></h2>
-          <div class="about-divider"></div>
+          <div class="about-divider gold-line"></div>
           <p>Enjoy a smooth and stress-free experience from booking to checkout. Whether you're visiting Kigali for business or relaxation, Hotel Eza offers comfort, convenience, and quick reservations.</p>
           <p>Every detail — from the quality of your room to the speed of your booking — is designed around your peace of mind.</p>
           <div class="about-features">
@@ -1230,7 +1252,7 @@
   <section id="contact" class="contact-section">
     <div class="container">
       <div class="contact-grid">
-        <div class="contact-left reveal">
+        <div class="contact-left reveal-left">
           <div class="label">Get in touch</div>
           <h2>Ready to book<br>your stay?</h2>
           <p>Have questions or want to book directly? Reach out — we're available and always ready to help you plan your time in Kigali.</p>
@@ -1255,7 +1277,7 @@
             </div>
           </div>
         </div>
-        <div class="contact-cta-box reveal reveal-delay-1">
+        <div class="contact-cta-box reveal-right reveal-delay-1">
           <h3>Book Your Stay at Hotel Eza</h3>
           <p>Take the next step and reserve your room today. It only takes a minute and we'll handle the rest.</p>
           <div class="cta-btns">
@@ -1294,32 +1316,130 @@
   </a>
 
 
+  <!-- CHATBOT -->
+  <iframe
+    id="keza-frame"
+    src="https://hotel-eza-chat.netlify.app"
+    allowtransparency="true"
+    scrolling="no"
+    style="position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;">
+  </iframe>
   <script>
-    // Sticky nav
+  window.addEventListener('message', function(e) {
+    var f = document.getElementById('keza-frame');
+    if (!f || !e.data || !e.data.type) return;
+    if (e.data.type === 'keza-open')
+      f.style.cssText = 'position:fixed;bottom:0;right:0;width:420px;height:700px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;';
+    if (e.data.type === 'keza-close')
+      f.style.cssText = 'position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;';
+  });
+  </script>
+
+  <script>
+    // ── Sticky nav
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80), { passive: true });
 
-    // Booking form
+    // ── Booking form
     function handleBook(e) {
       e.preventDefault();
       document.getElementById('booking-form-inner').style.display = 'none';
       document.getElementById('success-msg').style.display = 'block';
     }
 
-    // Date min
+    // ── Date min
     const today = new Date().toISOString().split('T')[0];
     ['ci','co','bb-checkin','bb-checkout'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.setAttribute('min', today);
     });
 
-    // Scroll reveal
+    // ── Universal scroll reveal (handles all reveal classes)
+    const allReveal = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .gold-line');
     const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
       });
     }, { threshold: 0, rootMargin: '0px 0px 99999px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    allReveal.forEach(el => revealObs.observe(el));
+
+    // ── Animated stat counters
+    function animateCounter(el, target, suffix, duration) {
+      const start = performance.now();
+      const isDecimal = target % 1 !== 0;
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = isDecimal ? (eased * target).toFixed(1) : Math.floor(eased * target);
+        el.textContent = val + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const raw = el.dataset.count;
+        const suffix = el.dataset.suffix || '';
+        animateCounter(el, parseFloat(raw), suffix, 1800);
+        statObs.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => statObs.observe(el));
+
+    // ── Parallax on hero image
+    const heroImg = document.querySelector('.hero-img img');
+    if (heroImg) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y < window.innerHeight) {
+          heroImg.style.transform = `scale(1) translateY(${y * 0.25}px)`;
+        }
+      }, { passive: true });
+    }
+
+    // ── Subtle parallax on quote section bg
+    const quoteBg = document.querySelector('.quote-bg img');
+    if (quoteBg) {
+      const section = document.querySelector('.quote-section');
+      window.addEventListener('scroll', () => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const offset = (window.innerHeight / 2 - rect.top) * 0.15;
+          quoteBg.style.transform = `translateY(${offset}px)`;
+        }
+      }, { passive: true });
+    }
+
+    // ── Room card tilt on mouse move
+    document.querySelectorAll('.room-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg) translateY(-6px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+        setTimeout(() => card.style.transition = '', 600);
+      });
+    });
+
+    // ── Testi card subtle lift
+    document.querySelectorAll('.testi-card').forEach(card => {
+      card.addEventListener('mouseenter', () => card.style.transform = 'translateY(-6px) scale(1.01)');
+      card.addEventListener('mouseleave', () => card.style.transform = '');
+    });
+
+    // ── Benefit cards stagger on scroll
+    document.querySelectorAll('.benefit-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
   </script>
 
 </body>
