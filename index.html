@@ -92,6 +92,8 @@
       transition: color 0.3s;
     }
     nav.scrolled .nav-logo { color: var(--dark); }
+    nav.scrolled .nav-logo svg rect:first-child { fill: var(--gold); opacity: 0.12; }
+    nav.scrolled .nav-logo svg { filter: none; }
     .nav-links { display: flex; align-items: center; gap: 36px; }
     .nav-link {
       font-size: 0.8rem;
@@ -912,7 +914,26 @@
   <nav id="nav">
     <div class="container">
       <div class="nav-inner">
-        <a href="#" class="nav-logo">Hotel Eza</a>
+        <a href="#" class="nav-logo" style="display:flex;align-items:center;gap:10px;">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="6" fill="#C4A044" opacity="0.15"/>
+            <rect x="1" y="1" width="30" height="30" rx="5.5" stroke="#C4A044" stroke-width="1" opacity="0.4"/>
+            <!-- Building silhouette -->
+            <rect x="6" y="18" width="20" height="9" rx="1" fill="#C4A044" opacity="0.9"/>
+            <rect x="9" y="12" width="14" height="8" rx="1" fill="#C4A044" opacity="0.75"/>
+            <rect x="13" y="7" width="6" height="7" rx="1" fill="#C4A044" opacity="0.6"/>
+            <!-- Door -->
+            <rect x="14" y="21" width="4" height="6" rx="1" fill="#0C0A08" opacity="0.5"/>
+            <!-- Windows row 1 -->
+            <rect x="10" y="14" width="2.5" height="2" rx="0.5" fill="#0C0A08" opacity="0.35"/>
+            <rect x="14.5" y="14" width="3" height="2" rx="0.5" fill="#0C0A08" opacity="0.35"/>
+            <rect x="19.5" y="14" width="2.5" height="2" rx="0.5" fill="#0C0A08" opacity="0.35"/>
+            <!-- Windows row 2 -->
+            <rect x="7.5" y="20" width="3" height="2" rx="0.5" fill="#0C0A08" opacity="0.3"/>
+            <rect x="21.5" y="20" width="3" height="2" rx="0.5" fill="#0C0A08" opacity="0.3"/>
+          </svg>
+          Hotel Eza
+        </a>
         <div class="nav-links">
           <a href="#about" class="nav-link">About</a>
           <a href="#rooms" class="nav-link">Rooms</a>
@@ -1322,16 +1343,19 @@
     src="https://hotel-eza-chat.netlify.app"
     allowtransparency="true"
     scrolling="no"
-    style="position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;">
+    style="position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;">
   </iframe>
   <script>
   window.addEventListener('message', function(e) {
     var f = document.getElementById('keza-frame');
     if (!f || !e.data || !e.data.type) return;
+    var base = 'position:fixed;border:none;z-index:9999;background:transparent;';
     if (e.data.type === 'keza-open')
-      f.style.cssText = 'position:fixed;bottom:0;right:0;width:420px;height:700px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;';
+      f.style.cssText = base + 'bottom:0;right:0;width:400px;height:700px;';
+    if (e.data.type === 'keza-open-mobile')
+      f.style.cssText = base + 'top:0;left:0;width:100%;height:100%;';
     if (e.data.type === 'keza-close')
-      f.style.cssText = 'position:fixed;bottom:0;right:0;width:90px;height:90px;border:none;z-index:9999;background:transparent;transition:width .25s,height .25s;';
+      f.style.cssText = base + 'bottom:0;right:0;width:90px;height:90px;';
   });
   </script>
 
